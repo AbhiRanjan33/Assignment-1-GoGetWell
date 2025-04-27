@@ -456,3 +456,17 @@ html {
   background-color: #3b82f6;
   border-radius: 20px;
 }
+
+@media (max-width: 768px) {
+    .text-4xl { font-size: 2rem; }
+    .text-3xl { font-size: 1.75rem; }
+    .text-2xl { font-size: 1.5rem; }
+    .padding-section { padding: 2rem 1rem; }
+    .flex-col-mobile { flex-direction: column; }
+  }
+  
+  @media (max-width: 480px) {
+    .hidden-mobile { display: none; }
+    .text-center-mobile { text-align: center; }
+    .button-mobile { width: 100%; }
+  }
