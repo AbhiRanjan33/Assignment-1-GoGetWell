@@ -1,5 +1,6 @@
 import { lazy } from 'react'
 import type { Routes } from '@/@types/routes'
+import sharedRoutes from './sharedRoutes'
 
 const authRoute: Routes = [
     {
@@ -28,7 +29,7 @@ const authRoute: Routes = [
     },
     {
         key: 'homePage',
-        path: `/hello`,
+        path: `/`,
         component: lazy(() => import('@/views/Home')),
         authority: []
     },

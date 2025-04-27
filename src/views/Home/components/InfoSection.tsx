@@ -1,490 +1,319 @@
-import React, { ReactNode } from 'react'
-import aboutUs from '@/assets/images/about_us.gif'
-import mission from '@/assets/images/our_mission.gif'
-import challenges from '@/assets/images/challenges_solve.gif'
+"use client"
+
+import type React from "react"
+import { useRef } from "react"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { Stethoscope, Heart, Activity, Shield, Globe, Brain } from "lucide-react"
+import aboutUs from "@/assets/images/about_us.gif"
+import mission from "@/assets/images/our_mission.gif"
+import challenges from "@/assets/images/challenges_solve.gif"
 
 interface SectionProps {
-    img: any
-    icon1: ReactNode
-    icon2: ReactNode
-    title: string
-    content1: string
-    content2: string
-    icontitle1: string
-    iconp1: string
-    icontitle2: string
-    iconp2: string
-    status: 'left' | 'right'
+  img: any
+  icon1: React.ReactNode
+  icon2: React.ReactNode
+  title: string
+  content1: string
+  content2: string
+  icontitle1: string
+  iconp1: string
+  icontitle2: string
+  iconp2: string
+  status: "left" | "right"
+  index: number
+  medicalIcon: React.ReactNode
 }
 
 const Section: React.FC<SectionProps> = ({
-    status,
-    img,
-    icon1,
-    icon2,
-    title,
-    content1,
-    content2,
-    icontitle1,
-    iconp1,
-    icontitle2,
-    iconp2,
+  status,
+  img,
+  icon1,
+  icon2,
+  title,
+  content1,
+  content2,
+  icontitle1,
+  iconp1,
+  icontitle2,
+  iconp2,
+  index,
+  medicalIcon,
 }) => {
-    return (
-        <div className="flex flex-col lg:flex-row gap-8 items-center">
-            {/* Image Section */}
-            <div
-                className={`w-full lg:w-1/2 flex items-center justify-center ${status && 'order-last lg:order-first'}`}
-            >
-                <img
-                    src={img}
-                    alt="About us"
-                    className="w-full object-cover rounded-lg max-w-[400px]"
-                />
-            </div>
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  })
 
-            {/* Content Section */}
-            <div
-                className={`w-full lg:w-1/2 ${status && 'order-first lg:order-last'}`}
-            >
-                <div className="mb-6">
-                    <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                        {title}
-                    </h2>
-                    <div className="h-1 w-20 bg-primary rounded-full"></div>
-                </div>
+  const x = useTransform(scrollYProgress, [0, 1], [status === "left" ? -50 : 50, 0])
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0.5])
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95])
 
-                <div className="space-y-4">
-                    <p className="text-gray-600 leading-relaxed">{content1}</p>
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+        delay: index * 0.2,
+      },
+    },
+  }
 
-                    <p className="text-gray-600 leading-relaxed">{content2}</p>
-                </div>
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+    hover: { scale: 1.05, transition: { duration: 0.3 } },
+  }
 
-                {/* Feature Points */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                    <div className="flex items-start gap-3">
-                        <div className="flex-shrink-0">
-                            <div className="p-3 bg-blue-100 rounded-lg">
-                                {icon1}
-                            </div>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold text-gray-800">
-                                {icontitle1}
-                            </h4>
-                            <p className="text-sm text-gray-600">{iconp1}</p>
-                        </div>
-                    </div>
+  return (
+    <motion.div
+      ref={sectionRef}
+      className={`flex flex-col lg:flex-row gap-8 items-center mb-24 md:mb-32 ${index === 0 ? "mt-12" : ""}`}
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+    >
+      {/* Image Section */}
+      <motion.div
+        className={`w-full lg:w-1/2 flex items-center justify-center ${status === "right" ? "order-last lg:order-first" : "order-first lg:order-last"}`}
+        style={{ x, opacity, scale }}
+        variants={itemVariants}
+        whileHover="hover"
+      >
+        <motion.div
+          whileHover={{
+            scale: 1.05,
+            rotate: [0, 1, 0, -1, 0],
+            transition: { duration: 1, ease: "easeInOut", repeat: Number.POSITIVE_INFINITY },
+          }}
+          className="relative"
+        >
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl blur opacity-30 group-hover:opacity-70 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
 
-                    <div className="flex items-start gap-3">
-                        <div className="flex-shrink-0">
-                            <div className="p-3 bg-blue-100 rounded-lg">
-                                {icon2}
-                            </div>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold text-gray-800">
-                                {icontitle2}
-                            </h4>
-                            <p className="text-sm text-gray-600">{iconp2}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          {/* Healthcare-themed image with medical icon overlay */}
+          <div className="relative">
+            <img
+              src={img || "/placeholder.svg"}
+              alt={title}
+              className="relative w-full object-cover rounded-xl max-w-[400px] sm:max-w-[450px] md:max-w-[500px] shadow-lg hover:shadow-xl transition-shadow duration-300"
+            />
+            <div className="absolute -top-4 -right-4 p-3 bg-white rounded-full shadow-lg">{medicalIcon}</div>
+          </div>
+        </motion.div>
+      </motion.div>
+
+      {/* Content Section */}
+      <motion.div
+        className={`w-full lg:w-1/2 ${status === "right" ? "order-first lg:order-last" : "order-last lg:order-first"}`}
+        variants={containerVariants}
+      >
+        <motion.div className="mb-6" variants={itemVariants}>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-3 flex items-center gap-3">
+            {title}
+            <span className="text-blue-500">{medicalIcon}</span>
+          </h2>
+          <motion.div
+            className="h-1 w-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+            initial={{ width: 0 }}
+            whileInView={{ width: 80 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          />
+        </motion.div>
+
+        <div className="space-y-4">
+          <motion.p className="text-gray-600 leading-relaxed text-base md:text-lg" variants={itemVariants}>
+            {content1}
+          </motion.p>
+
+          <motion.p className="text-gray-600 leading-relaxed text-base md:text-lg" variants={itemVariants}>
+            {content2}
+          </motion.p>
         </div>
-    )
+
+        {/* Feature Points */}
+        <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-8" variants={containerVariants}>
+          <motion.div
+            className="flex items-start gap-3 hover:bg-blue-50 p-3 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md"
+            variants={itemVariants}
+            whileHover="hover"
+          >
+            <div className="flex-shrink-0">
+              <motion.div
+                className="p-3 bg-blue-100 rounded-lg"
+                whileHover={{
+                  rotate: [0, 10, -10, 10, 0],
+                  scale: [1, 1.1, 1, 1.1, 1],
+                }}
+                transition={{ duration: 1 }}
+              >
+                {icon1}
+              </motion.div>
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-800 text-lg">{icontitle1}</h4>
+              <p className="text-sm text-gray-600">{iconp1}</p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="flex items-start gap-3 hover:bg-blue-50 p-3 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md"
+            variants={itemVariants}
+            whileHover="hover"
+          >
+            <div className="flex-shrink-0">
+              <motion.div
+                className="p-3 bg-blue-100 rounded-lg"
+                whileHover={{
+                  rotate: [0, 10, -10, 10, 0],
+                  scale: [1, 1.1, 1, 1.1, 1],
+                }}
+                transition={{ duration: 1 }}
+              >
+                {icon2}
+              </motion.div>
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-800 text-lg">{icontitle2}</h4>
+              <p className="text-sm text-gray-600">{iconp2}</p>
+            </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  )
 }
 
-const FullPageSections = () => {
-    const sections = [
-        {
-            img: aboutUs,
-            icon1: (
-                <svg
-                    className="w-6 h-6 text-primary"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                </svg>
-            ),
-            icon2: (
-                <svg
-                    className="w-6 h-6 text-primary"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                    />
-                </svg>
-            ),
-            title: 'About Us',
-            content1:
-                'We are a pioneering AI-driven platform focused on revolutionizing the medical tourism industry. By addressing inefficiencies and disorganization, we empower healthcare facilitators to modernize their operations, attract more patients, and deliver seamless, personalized care across borders.',
-            content2:
-                'Our cutting-edge solutions are designed to streamline processes and enhance the overall patient experience.',
-            icontitle1: 'Modern Solutions',
-            iconp1: 'Leveraging AI technology for healthcare',
-            icontitle2: 'Patient-Centric',
-            iconp2: 'Personalized healthcare experiences',
-            status: 'left',
-        },
-        {
-            img: mission,
-            icon1: (
-                <svg
-                    className="w-6 h-6 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                </svg>
-            ),
-            icon2: (
-                <svg
-                    className="w-6 h-6 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                    />
-                </svg>
-            ),
-            title: 'Our Mission',
-            content1:
-                'Our mission is to simplify the complex medical tourism process by leveraging advanced AI tools that optimize healthcare facilitators operations, maximize revenue opportunities, and provide patients with personalized and stress-free treatment journeys.',
-            content2:
-                'We strive to become the leading platform for healthcare tourism management and digital transformation.',
-            icontitle1: 'Modern Solutions',
-            iconp1: 'Leveraging AI technology for healthcare',
-            icontitle2: 'Patient-Centric',
-            iconp2: 'Personalized healthcare experiences',
-            status: 'left',
-        },
-    ]
+const InfoSection: React.FC = () => {
+  const sections = [
+    {
+      img: aboutUs,
+      icon1: <Stethoscope className="w-6 h-6 text-blue-500" />,
+      icon2: <Heart className="w-6 h-6 text-blue-500" />,
+      title: "About Us",
+      content1:
+        "We are a pioneering AI-driven platform focused on revolutionizing the medical tourism industry. By addressing inefficiencies and disorganization, we empower healthcare facilitators to modernize their operations, attract more patients, and deliver seamless, personalized care across borders.",
+      content2:
+        "Our cutting-edge solutions are designed to streamline processes and enhance the overall patient experience.",
+      icontitle1: "Modern Healthcare Solutions",
+      iconp1: "Leveraging AI technology for healthcare",
+      icontitle2: "Patient-Centric Care",
+      iconp2: "Personalized healthcare experiences",
+      status: "left",
+      medicalIcon: <Stethoscope className="w-6 h-6" />,
+    },
+    {
+      img: mission,
+      icon1: <Shield className="w-6 h-6 text-blue-500" />,
+      icon2: <Activity className="w-6 h-6 text-blue-500" />,
+      title: "Our Mission",
+      content1:
+        "Our mission is to simplify the complex medical tourism process by leveraging advanced AI tools that optimize healthcare facilitators operations, maximize revenue opportunities, and provide patients with personalized and stress-free treatment journeys.",
+      content2:
+        "We strive to become the leading platform for healthcare tourism management and digital transformation.",
+      icontitle1: "AI-Powered Healthcare",
+      iconp1: "Optimizing operations with advanced technology",
+      icontitle2: "Growth-Focused Solutions",
+      iconp2: "Maximizing revenue and opportunities",
+      status: "right",
+      medicalIcon: <Heart className="w-6 h-6" />,
+    },
+    {
+      img: challenges,
+      icon1: <Brain className="w-6 h-6 text-blue-500" />,
+      icon2: <Globe className="w-6 h-6 text-blue-500" />,
+      title: "The Challenges We Solve",
+      content1:
+        "Medical tourism, especially in India, is plagued by disorganization and inefficiency. Facilitators often rely on outdated methods, leading to delayed bookings, inadequate patient support, and missed growth opportunities.",
+      content2:
+        "Our platform addresses these pain points by streamlining lead management and improving operational efficiency for facilitators and hospitals alike.",
+      icontitle1: "Efficient Medical Operations",
+      iconp1: "Streamlined booking and management",
+      icontitle2: "Enhanced Patient Support",
+      iconp2: "Improved patient communication",
+      status: "left",
+      medicalIcon: <Activity className="w-6 h-6" />,
+    },
+  ]
 
-
-    return (
-        <div className="scroll-smooth max-w-[1538px] mx-auto">
-            <div className="w-full max-w-7xl mx-auto px-4 py-20 flex flex-col gap-y-32">
-                <div className="flex flex-col lg:flex-row gap-8 items-center">
-                    {/* Image Section */}
-                    <div className="w-full lg:w-1/2 flex items-center justify-center">
-                        <img
-                            src={aboutUs}
-                            alt="About us"
-                            className="w-full object-cover rounded-lg max-w-[400px]"
-                        />
-                    </div>
-
-                    {/* Content Section */}
-                    <div className="w-full lg:w-1/2">
-                        <div className="mb-6">
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                                About Us
-                            </h2>
-                            <div className="h-1 w-20 bg-primary rounded-full"></div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <p className="text-gray-600 leading-relaxed">
-                                We are a pioneering AI-driven platform focused
-                                on revolutionizing the medical tourism industry.
-                                By addressing inefficiencies and
-                                disorganization, we empower healthcare
-                                facilitators to modernize their operations,
-                                attract more patients, and deliver seamless,
-                                personalized care across borders.
-                            </p>
-
-                            <p className="text-gray-600 leading-relaxed">
-                                Our cutting-edge solutions are designed to
-                                streamline processes and enhance the overall
-                                patient experience.
-                            </p>
-                        </div>
-
-                        {/* Feature Points */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                            <div className="flex items-start gap-3">
-                                <div className="flex-shrink-0">
-                                    <div className="p-3 bg-blue-100 rounded-lg">
-                                        <svg
-                                            className="w-6 h-6 text-primary"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M13 10V3L4 14h7v7l9-11h-7z"
-                                            />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold text-gray-800">
-                                        Modern Solutions
-                                    </h4>
-                                    <p className="text-sm text-gray-600">
-                                        Leveraging AI technology for healthcare
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-3">
-                                <div className="flex-shrink-0">
-                                    <div className="p-3 bg-blue-100 rounded-lg">
-                                        <svg
-                                            className="w-6 h-6 text-primary"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                                            />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold text-gray-800">
-                                        Patient-Centric
-                                    </h4>
-                                    <p className="text-sm text-gray-600">
-                                        Personalized healthcare experiences
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="flex flex-col lg:flex-row gap-8 items-center">
-                    {/* Image Section - Will appear first on mobile */}
-                    <div className="w-full lg:w-1/2 flex items-center justify-center order-first lg:order-last">
-                        <img
-                            src={mission}
-                            alt="Our Mission"
-                            className="w-full object-cover rounded-lg max-w-md"
-                        />
-                    </div>
-
-                    {/* Content Section */}
-                    <div className="w-full lg:w-1/2 order-last lg:order-first">
-                        <div className="mb-6">
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                                Our Mission
-                            </h2>
-                            <div className="h-1 w-20 bg-primary rounded-full"></div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <p className="text-gray-600 leading-relaxed">
-                                Our mission is to simplify the complex medical
-                                tourism process by leveraging advanced AI tools
-                                that optimize healthcare facilitators
-                                operations, maximize revenue opportunities, and
-                                provide patients with personalized and
-                                stress-free treatment journeys.
-                            </p>
-
-                            <p className="text-gray-600 leading-relaxed">
-                                We strive to become the leading platform for
-                                healthcare tourism management and digital
-                                transformation.
-                            </p>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                            <div className="flex items-start gap-3">
-                                <div className="flex-shrink-0">
-                                    <div className="p-3 bg-blue-100 rounded-lg">
-                                        <svg
-                                            className="w-6 h-6 text-primary"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                            />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold text-gray-800">
-                                        AI-Powered Solutions
-                                    </h4>
-                                    <p className="text-sm text-gray-600">
-                                        Optimizing operations with advanced
-                                        technology
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-3">
-                                <div className="flex-shrink-0">
-                                    <div className="p-3 bg-blue-100 rounded-lg">
-                                        <svg
-                                            className="w-6 h-6 text-primary"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                                            />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold text-gray-800">
-                                        Growth Focus
-                                    </h4>
-                                    <p className="text-sm text-gray-600">
-                                        Maximizing revenue and opportunities
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="flex flex-col lg:flex-row gap-8 items-center">
-                    {/* Image Section - Left Side */}
-                    <div className="w-full lg:w-1/2 flex items-center justify-center">
-                        <img
-                            src={challenges}
-                            alt="Challenges in Medical Tourism"
-                            className="w-full object-cover rounded-lg max-w-[400px]"
-                        />
-                    </div>
-
-                    {/* Content Section */}
-                    <div className="w-full lg:w-1/2">
-                        <div className="mb-6">
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">
-                                The Challenges We Solve
-                            </h2>
-                            <div className="h-1 w-20 bg-primary rounded-full"></div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <p className="text-gray-600 leading-relaxed">
-                                Medical tourism, especially in India, is plagued
-                                by disorganization and inefficiency.
-                                Facilitators often rely on outdated methods,
-                                leading to delayed bookings, inadequate patient
-                                support, and missed growth opportunities.
-                            </p>
-
-                            <p className="text-gray-600 leading-relaxed">
-                                Our platform addresses these pain points by
-                                streamlining lead management and improving
-                                operational efficiency for facilitators and
-                                hospitals alike.
-                            </p>
-                        </div>
-
-                        {/* Feature Points */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                            <div className="flex items-start gap-3">
-                                <div className="flex-shrink-0">
-                                    <div className="p-3 bg-blue-100 rounded-lg">
-                                        <svg
-                                            className="w-6 h-6 text-primary"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                            />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold text-gray-800">
-                                        Efficient Operations
-                                    </h4>
-                                    <p className="text-sm text-gray-600">
-                                        Streamlined booking and management
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-3">
-                                <div className="flex-shrink-0">
-                                    <div className="p-3 bg-blue-100 rounded-lg">
-                                        <svg
-                                            className="w-6 h-6 text-primary"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
-                                            />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold text-gray-800">
-                                        Enhanced Support
-                                    </h4>
-                                    <p className="text-sm text-gray-600">
-                                        Improved patient communication
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
+  // Medical-themed background patterns
+  const MedicalPattern = () => (
+    <div className="absolute inset-0 opacity-5 pointer-events-none">
+      {/* DNA Helix Pattern */}
+      <div className="absolute right-10 top-1/3 h-64 w-8 flex flex-col justify-between opacity-30">
+        {Array(8)
+          .fill(0)
+          .map((_, i) => (
+            <div key={i} className="flex justify-between">
+              <div className={`w-2 h-2 rounded-full ${i % 2 === 0 ? "bg-blue-500" : "bg-purple-500"}`}></div>
+              <div className={`w-2 h-2 rounded-full ${i % 2 === 0 ? "bg-purple-500" : "bg-blue-500"}`}></div>
             </div>
-        </div>
-    )
+          ))}
+      </div>
+
+      {/* Medical Cross Symbols */}
+      <div className="absolute left-20 bottom-10 text-4xl text-blue-500 opacity-20">+</div>
+      <div className="absolute right-40 top-20 text-3xl text-purple-500 opacity-20">+</div>
+      <div className="absolute left-1/3 top-10 text-2xl text-green-500 opacity-20">+</div>
+
+      {/* Heartbeat Line */}
+      <svg className="absolute left-0 top-1/2 w-full h-20 opacity-10" viewBox="0 0 1200 200">
+        <path
+          d="M0,100 L100,100 L150,50 L200,150 L250,50 L300,150 L350,100 L1200,100"
+          fill="none"
+          stroke="#3B82F6"
+          strokeWidth="2"
+        />
+      </svg>
+    </div>
+  )
+
+  return (
+    <div className="scroll-smooth max-w-[1538px] mx-auto relative py-16">
+      {/* Background elements */}
+      <motion.div
+        className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full mix-blend-multiply filter blur-3xl"
+        animate={{
+          scale: [1, 1.2, 1],
+          x: [0, -30, 0],
+          y: [0, 30, 0],
+        }}
+        transition={{
+          duration: 15,
+          repeat: Number.POSITIVE_INFINITY,
+          ease: "easeInOut",
+        }}
+      />
+
+      <motion.div
+        className="absolute bottom-0 left-0 w-96 h-96 bg-purple-500/5 rounded-full mix-blend-multiply filter blur-3xl"
+        animate={{
+          scale: [1, 1.3, 1],
+          x: [0, 30, 0],
+          y: [0, -30, 0],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Number.POSITIVE_INFINITY,
+          ease: "easeInOut",
+          delay: 2,
+        }}
+      />
+
+      {/* Medical-themed background pattern */}
+      <MedicalPattern />
+
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-16 sm:py-20 md:py-24 flex flex-col gap-y-24 sm:gap-y-28 md:gap-y-32 relative z-10">
+        {sections.map((section, index) => (
+          <Section key={index} {...section} index={index} />
+        ))}
+      </div>
+    </div>
+  )
 }
 
-export default FullPageSections
+export default InfoSection
