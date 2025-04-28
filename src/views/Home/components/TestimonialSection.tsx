@@ -9,11 +9,11 @@ import RevealOnScroll from "@/components/RevealOnScroll"
 
 // Use the same external avatar URLs as the first code
 const healthcareAvatars = [
-  "https://i.pravatar.cc/150?img=1",
-  "https://i.pravatar.cc/150?img=2",
-  "https://i.pravatar.cc/150?img=3",
-  "https://i.pravatar.cc/150?img=4",
-  "https://i.pravatar.cc/150?img=5",
+  "/anil.jpeg",
+  "/sarah.jpeg",
+  "/rajesh.jpeg", 
+  "/emily.jpeg",
+  "/michael.jpeg",
 ]
 
 // Extended testimonials with more entries and additional details

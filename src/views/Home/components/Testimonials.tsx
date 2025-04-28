@@ -10,28 +10,28 @@ const testimonials = [
   {
     name: "Dr. Sarah Johnson",
     role: "Healthcare Facilitator",
-    image: "/placeholder.svg?height=80&width=80",
+    image: "/sarah.jpg",
     content:
       "GoGetWell.AI has completely transformed how I manage my healthcare facilitation business. The AI-powered website and patient management tools have saved me countless hours and helped me grow my client base by 40% in just three months.",
   },
   {
     name: "Rajesh Mehta",
     role: "Medical Tourism Specialist",
-    image: "/placeholder.svg?height=80&width=80",
+    image: "/rajesh.jpg",
     content:
       "As someone who connects international patients with Indian hospitals, I needed a solution that could handle multiple languages and time zones. This platform does it all seamlessly, and the AI assistant handles patient queries 24/7.",
   },
   {
     name: "Dr. Emily Chen",
     role: "Independent Practitioner",
-    image: "/placeholder.svg?height=80&width=80",
+    image: "/emily.jpg",
     content:
       "The customizable website templates are beautiful and professional. I was able to create my online presence in just a day, and the integrated booking system has significantly reduced no-shows. Highly recommended!",
   },
   {
     name: "Michael Rodriguez",
     role: "Hospital Partnership Manager",
-    image: "/placeholder.svg?height=80&width=80",
+    image: "/michael.jpg",
     content:
       "The platform's ability to integrate with our hospital systems has streamlined our partnership with independent facilitators. The analytics and reporting features provide valuable insights that help us optimize our services.",
   },
